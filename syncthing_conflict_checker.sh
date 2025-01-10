@@ -24,7 +24,7 @@ fi
 conflicts=""
 
 # Search for conflicts in each path
-for sync_path in $sync_paths; do
+echo "$sync_paths" | while IFS= read -r sync_path; do
     if [ ! -d "$sync_path" ]; then
         ntfy pub "$1" "Warning: Path $sync_path does not exist or is not a directory"
         continue

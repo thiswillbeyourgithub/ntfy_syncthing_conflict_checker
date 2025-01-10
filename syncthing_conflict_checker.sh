@@ -1,5 +1,19 @@
 #!/bin/zsh
 
+# Parse arguments
+verbose=true
+while getopts ":v" opt; do
+  case $opt in
+    v)
+      verbose=false
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
 # Check if ntfy is installed
 if ! command -v ntfy &> /dev/null; then
     echo "ntfy could not be found, please install it first"
@@ -39,7 +53,7 @@ done
 
 # Send results
 if [ -n "$conflicts" ]; then
-    ntfy pub "$1" "Sync conflicts found:\n$conflicts"
-else
-    ntfy pub "$1" "No sync conflicts found"
+    ntfy pub "$1" "Sync conflicts found in:\n$sync_paths\n\nConflicts:\n$conflicts"
+elif [ "$verbose" = true ]; then
+    ntfy pub "$1" "No sync conflicts found in:\n$sync_paths"
 fi

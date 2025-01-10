@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/zsh
 
 # Check if ntfy is installed
 if ! command -v ntfy &> /dev/null; then

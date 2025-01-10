@@ -13,9 +13,9 @@ if ! command -v syncthingctl &> /dev/null; then
 fi
 
 # Get all synced paths
-paths=$(syncthingctl | awk '{print $NF}' | grep '^/')
+sync_paths=$(syncthingctl | awk '{print $NF}' | grep '^/')
 
-if [ -z "$paths" ]; then
+if [ -z "$sync_paths" ]; then
     ntfy pub "$1" "Error: No synced paths found"
     exit 1
 fi
@@ -24,14 +24,14 @@ fi
 conflicts=""
 
 # Search for conflicts in each path
-for path in $paths; do
-    if [ ! -d "$path" ]; then
-        ntfy pub "$1" "Warning: Path $path does not exist or is not a directory"
+for sync_path in $sync_paths; do
+    if [ ! -d "$sync_path" ]; then
+        ntfy pub "$1" "Warning: Path $sync_path does not exist or is not a directory"
         continue
     fi
     
     # Find conflicts and append to variable
-    new_conflicts=$(find "$path" -type f -name "*sync.conflict*")
+    new_conflicts=$(find "$sync_path" -type f -name "*sync.conflict*")
     if [ -n "$new_conflicts" ]; then
         conflicts+="$new_conflicts\n"
     fi

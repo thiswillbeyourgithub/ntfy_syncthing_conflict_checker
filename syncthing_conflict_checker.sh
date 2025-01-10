@@ -5,7 +5,7 @@ verbose=false
 while getopts ":v" opt; do
   case $opt in
     v)
-      verbose=false
+      verbose=true
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2

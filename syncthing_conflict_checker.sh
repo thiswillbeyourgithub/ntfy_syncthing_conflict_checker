@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Parse arguments
-verbose=true
+verbose=false
 while getopts ":v" opt; do
   case $opt in
     v)

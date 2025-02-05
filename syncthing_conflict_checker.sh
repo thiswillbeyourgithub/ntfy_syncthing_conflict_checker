@@ -86,6 +86,9 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
         notify "Warning: Path $sync_path does not exist or is not a directory"
         continue
     fi
+    if [[ "$verbose" == true ]]; then
+        echo "checking $sync_path"
+    fi
     
     # Find conflicts and append to variable
     new_conflicts=$(find "$sync_path" -type f -name "*sync.conflict*")

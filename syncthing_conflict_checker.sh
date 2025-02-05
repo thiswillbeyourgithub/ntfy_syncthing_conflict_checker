@@ -91,7 +91,7 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     fi
     
     # Find conflicts and append to variable
-    new_conflicts=$(find "$sync_path" -type f -name "*sync.conflict*")
+    new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*")
     if [ -n "$new_conflicts" ]; then
         conflicts+="$new_conflicts\n"
     fi

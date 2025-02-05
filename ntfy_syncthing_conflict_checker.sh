@@ -61,8 +61,8 @@ if ! command -v syncthingctl &> /dev/null; then
     exit 1
 fi
 
-# Get all synced paths
-sync_paths=$(syncthingctl | awk '{print $NF}' | grep '^/')
+# Get all synced paths and sort them alphabetically
+sync_paths=$(syncthingctl | awk '{print $NF}' | grep '^/' | sort)
 
 if [ -z "$sync_paths" ]; then
     notify "Error: No synced paths found"
@@ -84,7 +84,7 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     fi
     
     # Find conflicts and append to variable with relative paths
-    new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec realpath --relative-to="$sync_path" {} \;)
+    new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec realpath --relative-to="$sync_path" {} \; | sort)
     if [ -n "$new_conflicts" ]; then
         conflicts+="$new_conflicts\n"
         # Add path to conflict_paths if not already present

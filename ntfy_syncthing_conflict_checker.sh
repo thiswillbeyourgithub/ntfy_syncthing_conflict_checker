@@ -83,8 +83,8 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
         echo "checking $sync_path"
     fi
     
-    # Find conflicts and append to variable
-    new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*")
+    # Find conflicts and append to variable with relative paths
+    new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec realpath --relative-to="$sync_path" {} \;)
     if [ -n "$new_conflicts" ]; then
         conflicts+="$new_conflicts\n"
         # Add path to conflict_paths if not already present

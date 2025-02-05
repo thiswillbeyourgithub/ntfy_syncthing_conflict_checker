@@ -1,25 +1,50 @@
 #!/bin/zsh
 
-# Store topic before parsing args
-if [ -z "$1" ]; then
-    echo "Error: No ntfy topic provided"
+# Initialize default values
+verbose=false
+topic="print"
+
+# Function to show usage
+show_usage() {
+    cat << EOF
+Usage: $0 [options]
+Options:
+    -v, --verbose     Show verbose output
+    -t, --topic      Specify notification topic (default: print)
+    -h, --help       Show this help message
+EOF
     exit 1
-fi
-topic=$1
-shift
+}
 
 # Parse arguments
-verbose=false
-while getopts ":v" opt; do
-  case $opt in
-    v)
-      verbose=true
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-  esac
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -v|--verbose)
+            verbose=true
+            shift
+            ;;
+        -t|--topic)
+            if [[ -z "$2" ]]; then
+                echo "Error: topic argument is required" >&2
+                show_usage
+            fi
+            topic="$2"
+            shift 2
+            ;;
+        -h|--help)
+            show_usage
+            ;;
+        *)
+            # For backward compatibility, treat single argument as topic
+            if [[ $# -eq 1 && "$topic" == "print" ]]; then
+                topic="$1"
+                shift
+            else
+                echo "Error: Unknown option $1" >&2
+                show_usage
+            fi
+            ;;
+    esac
 done
 
 # Check if ntfy is installed

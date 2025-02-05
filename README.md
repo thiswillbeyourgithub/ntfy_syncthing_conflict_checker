@@ -1,4 +1,4 @@
-# Syncthing Conflict Checker
+# Ntfy Syncthing Conflict Checker
 
 A simple Zsh script to detect and report file conflicts in Syncthing shared folders.
 
@@ -21,20 +21,20 @@ A simple Zsh script to detect and report file conflicts in Syncthing shared fold
 1. Clone this repository or download the script:
 
 ```bash
-cd syncthing-conflict-checker
+cd ntfy_syncthing-conflict-checker
 ```
 
 2. Make the script executable:
 
 ```bash
-chmod +x syncthing_conflict_checker.sh
+chmod +x ntfy_syncthing_conflict_checker.sh
 ```
 
 ## Usage
 
 Basic usage:
 ```bash
-./syncthing_conflict_checker.sh
+./ntfy_syncthing_conflict_checker.sh
 ```
 
 Options:
@@ -48,12 +48,12 @@ Examples:
 
 1. Check for conflicts with verbose output:
 ```bash
-./syncthing_conflict_checker.sh --verbose
+./ntfy_syncthing_conflict_checker.sh --verbose
 ```
 
 2. Send notifications to a specific ntfy topic:
 ```bash
-./syncthing_conflict_checker.sh --topic mytopic
+./ntfy_syncthing_conflict_checker.sh --topic mytopic
 ```
 
 ## Output

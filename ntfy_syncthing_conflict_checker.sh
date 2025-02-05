@@ -28,6 +28,11 @@ while [[ $# -gt 0 ]]; do
                 echo "Error: topic argument is required" >&2
                 show_usage
             fi
+            # Check if ntfy is installed
+            if ! command -v ntfy &> /dev/null; then
+                echo "ntfy could not be found, please install it first"
+                exit 1
+            fi
             topic="$2"
             shift 2
             ;;
@@ -35,21 +40,8 @@ while [[ $# -gt 0 ]]; do
             show_usage
             ;;
         *)
-            # For backward compatibility, treat single argument as topic
-            if [[ $# -eq 1 && "$topic" == "print" ]]; then
-
-                # Check if ntfy is installed
-                if ! command -v ntfy &> /dev/null; then
-                    echo "ntfy could not be found, please install it first"
-                    exit 1
-                fi
-
-                topic="$1"
-                shift
-            else
-                echo "Error: Unknown option $1" >&2
-                show_usage
-            fi
+            echo "Error: Unknown option $1" >&2
+            show_usage
             ;;
     esac
 done

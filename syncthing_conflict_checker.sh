@@ -77,8 +77,9 @@ if [ -z "$sync_paths" ]; then
     exit 1
 fi
 
-# Initialize conflicts variable
+# Initialize variables
 conflicts=""
+conflict_paths=""
 
 # Search for conflicts in each path
 echo "$sync_paths" | while IFS= read -r sync_path; do
@@ -94,12 +95,16 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*")
     if [ -n "$new_conflicts" ]; then
         conflicts+="$new_conflicts\n"
+        # Add path to conflict_paths if not already present
+        if [[ ! "$conflict_paths" =~ "$sync_path" ]]; then
+            conflict_paths+="$sync_path\n"
+        fi
     fi
 done
 
 # Send results
 if [ -n "$conflicts" ]; then
-    notify "Sync conflicts found in:\n$sync_paths\n\nConflicts:\n$conflicts"
+    notify "Sync conflicts found in:\n$conflict_paths\n\nConflicts:\n$conflicts"
 elif [ "$verbose" = true ]; then
     notify "No sync conflicts found in:\n$sync_paths"
 fi

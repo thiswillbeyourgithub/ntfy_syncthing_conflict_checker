@@ -47,15 +47,25 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Check if ntfy is installed
-if ! command -v ntfy &> /dev/null; then
-    echo "ntfy could not be found, please install it first"
-    exit 1
-fi
+function notify() {
+    if [[ "$topic" == "print" ]]
+    then
+        echo "$1"
+    else
+        ntfy pub --quiet "$topic""$1"
+
+        # Check if ntfy is installed
+        if ! command -v ntfy &> /dev/null; then
+            echo "ntfy could not be found, please install it first"
+            exit 1
+        fi
+
+    fi
+}
 
 # Check if syncthingctl is installed
 if ! command -v syncthingctl &> /dev/null; then
-    ntfy pub "$topic" "Error: syncthingctl could not be found, please install it first"
+    notify "Error: syncthingctl could not be found, please install it first"
     exit 1
 fi
 
@@ -63,7 +73,7 @@ fi
 sync_paths=$(syncthingctl | awk '{print $NF}' | grep '^/')
 
 if [ -z "$sync_paths" ]; then
-    ntfy pub "$topic" "Error: No synced paths found"
+    notify "Error: No synced paths found"
     exit 1
 fi
 
@@ -73,7 +83,7 @@ conflicts=""
 # Search for conflicts in each path
 echo "$sync_paths" | while IFS= read -r sync_path; do
     if [ ! -d "$sync_path" ]; then
-        ntfy pub "$topic" "Warning: Path $sync_path does not exist or is not a directory"
+        notify "Warning: Path $sync_path does not exist or is not a directory"
         continue
     fi
     
@@ -86,7 +96,7 @@ done
 
 # Send results
 if [ -n "$conflicts" ]; then
-    ntfy pub "$topic" "Sync conflicts found in:\n$sync_paths\n\nConflicts:\n$conflicts"
+    notify "Sync conflicts found in:\n$sync_paths\n\nConflicts:\n$conflicts"
 elif [ "$verbose" = true ]; then
-    ntfy pub "$topic" "No sync conflicts found in:\n$sync_paths"
+    notify "No sync conflicts found in:\n$sync_paths"
 fi

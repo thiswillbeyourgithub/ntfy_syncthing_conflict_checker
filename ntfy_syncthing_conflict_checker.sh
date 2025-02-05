@@ -37,6 +37,13 @@ while [[ $# -gt 0 ]]; do
         *)
             # For backward compatibility, treat single argument as topic
             if [[ $# -eq 1 && "$topic" == "print" ]]; then
+
+                # Check if ntfy is installed
+                if ! command -v ntfy &> /dev/null; then
+                    echo "ntfy could not be found, please install it first"
+                    exit 1
+                fi
+
                 topic="$1"
                 shift
             else
@@ -53,13 +60,6 @@ function notify() {
         echo "$1"
     else
         ntfy pub --quiet "$topic""$1"
-
-        # Check if ntfy is installed
-        if ! command -v ntfy &> /dev/null; then
-            echo "ntfy could not be found, please install it first"
-            exit 1
-        fi
-
     fi
 }
 

@@ -9,7 +9,7 @@ show_usage() {
     cat << EOF
 Usage: $0 [options]
 Options:
-    -v, --verbose     Show verbose output
+    -v, --verbose    Show verbose output
     -t, --topic      Specify notification topic (default: print)
     -h, --help       Show this help message
 EOF

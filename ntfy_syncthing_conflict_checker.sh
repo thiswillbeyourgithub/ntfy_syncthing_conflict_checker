@@ -4,6 +4,7 @@
 verbose=false
 topic="print"
 nodate=false
+abspath=false
 
 # Function to show usage
 show_usage() {
@@ -13,6 +14,7 @@ Options:
     -v, --verbose    Show verbose output
     -t, --topic      Specify notification topic (default: print)
     -D, --no-date    Dont include dates in the output
+    -a, --absolute   Use absolute paths instead of relative
     -h, --help       Show this help message
 EOF
     exit 1
@@ -40,6 +42,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -D|--no-date)
             nodate=true
+            shift
+            ;;
+        -a|--absolute)
+            abspath=true
             shift
             ;;
         -h|--help)
@@ -88,13 +94,20 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     if [[ "$verbose" == true ]]; then
         echo "checking $sync_path"
     fi
+
+    if [[ "$abspath" == "true" ]]
+    then
+        pathcmd='$1'
+    else
+        pathcmd='$(realpath --relative-to="'$sync_path'" "$1")'
+    fi
     
     # Find conflicts and append to variable with relative paths and if needed creation dates
     if [[ "$nodate" == "false" ]]
     then
-        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s (%s)\n" "$(realpath --relative-to="'"$sync_path"'" "$1")" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; | sort)
+        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s (%s)\n" "$pathcmd" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; | sort)
     else
-        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s\n" "$(realpath --relative-to="'"$sync_path"'" "$1")"' _ {} \; | sort)
+        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s\n" "'$pathcmd'"' _ {} \; | sort)
     fi
 
     if [ -n "$new_conflicts" ]; then

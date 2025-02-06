@@ -12,7 +12,7 @@ Usage: $0 [options]
 Options:
     -v, --verbose    Show verbose output
     -t, --topic      Specify notification topic (default: print)
-    -D, -no-date     Dont include dates in the output
+    -D, --no-date    Dont include dates in the output
     -h, --help       Show this help message
 EOF
     exit 1

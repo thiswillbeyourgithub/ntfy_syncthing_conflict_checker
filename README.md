@@ -41,6 +41,7 @@ Options:
 ```
 -v, --verbose     Show verbose output
 -t, --topic       Specify notification topic (default: print)
+-D, --no-date     Don't include dates in the output
 -h, --help        Show this help message
 ```
 
@@ -54,6 +55,11 @@ Examples:
 2. Send notifications to a specific ntfy topic:
 ```bash
 ./ntfy_syncthing_conflict_checker.sh --topic mytopic
+```
+
+3. Check for conflicts without showing dates:
+```bash
+./ntfy_syncthing_conflict_checker.sh --no-date
 ```
 
 ## Output

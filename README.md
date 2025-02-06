@@ -42,6 +42,7 @@ Options:
 -v, --verbose     Show verbose output
 -t, --topic       Specify notification topic (default: print)
 -D, --no-date     Don't include dates in the output
+-a, --absolute    Use absolute paths instead of relative
 -h, --help        Show this help message
 ```
 
@@ -60,6 +61,11 @@ Examples:
 3. Check for conflicts without showing dates:
 ```bash
 ./ntfy_syncthing_conflict_checker.sh --no-date
+```
+
+4. Check for conflicts using absolute paths:
+```bash
+./ntfy_syncthing_conflict_checker.sh --absolute
 ```
 
 ## Output

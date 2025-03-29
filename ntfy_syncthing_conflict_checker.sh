@@ -63,7 +63,7 @@ function notify() {
     then
         echo "$1"
     else
-        ntfy pub --quiet "$topic" "$1"
+        NTFY_TITLE="Syncthing Conflicts" ntfy pub --quiet "$topic" "$1"
     fi
 }
 

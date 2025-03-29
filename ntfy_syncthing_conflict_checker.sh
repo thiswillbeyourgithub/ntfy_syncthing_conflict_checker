@@ -123,7 +123,7 @@ done
 
 # Send results
 if [ -n "$conflicts" ]; then
-    notify "\nSync conflicts found in:\n$conflict_paths\n\nConflicts:\n$conflicts"
+    notify "Sync conflicts found in:\n$conflict_paths\n\nConflicts:\n$conflicts"
 elif [ "$verbose" = true ]; then
-    notify "\nNo sync conflicts found in:\n$sync_paths"
+    notify "No sync conflicts found in:\n$sync_paths"
 fi

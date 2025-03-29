@@ -107,7 +107,7 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     # Find conflicts and append to variable with relative paths and if needed creation dates
     if [[ "$nodate" == "false" ]]
     then
-        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s (%s)\n" "$pathcmd" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; | sort)
+        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s (%s)\n" "'$pathcmd'" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; | sort)
     else
         new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -exec sh -c 'printf "%s\n" "'$pathcmd'"' _ {} \; | sort)
     fi

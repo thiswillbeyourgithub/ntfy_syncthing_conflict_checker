@@ -63,7 +63,9 @@ function notify() {
     then
         echo "$1"
     else
-        NTFY_TITLE="Syncthing Conflicts" ntfy pub --quiet "$topic" "$1"
+        # clean newlines for ntfy
+        cleaned=$(echo "$1" | sed 's/\n/\r\r/g')
+        NTFY_TITLE="Syncthing Conflicts" ntfy pub --quiet "$topic" "$cleaned"
     fi
 }
 

@@ -63,7 +63,7 @@ function notify() {
     then
         echo "$1"
     else
-        ntfy pub --quiet "$topic""$1"
+        ntfy pub --quiet "$topic" "$1"
     fi
 }
 

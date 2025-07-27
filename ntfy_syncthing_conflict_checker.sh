@@ -76,7 +76,7 @@ if ! command -v syncthingctl &> /dev/null; then
 fi
 
 # Get all synced paths and sort them alphabetically
-sync_paths=$(syncthingctl | awk '{print $NF}' | grep '^/' | sort)
+sync_paths=$(syncthingctl | awk '{print $NF}' | grep -v " Last file name" | grep '^/' | sort)
 
 if [ -z "$sync_paths" ]; then
     notify "Error: No synced paths found"

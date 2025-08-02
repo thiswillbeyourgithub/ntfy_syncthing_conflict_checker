@@ -75,8 +75,14 @@ if ! command -v syncthingctl &> /dev/null; then
     exit 1
 fi
 
+# Check if jq is installed
+if ! command -v jq &> /dev/null; then
+    notify "Error: jq could not be found, please install it first"
+    exit 1
+fi
+
 # Get all synced paths and sort them alphabetically
-sync_paths=$(syncthingctl | awk '{print $NF}' | grep -v " Last file name" | grep '^/' | sort)
+sync_paths=$(syncthingctl cat | jq -r '.folders[]["path"]' | sort)
 
 if [ -z "$sync_paths" ]; then
     notify "Error: No synced paths found"

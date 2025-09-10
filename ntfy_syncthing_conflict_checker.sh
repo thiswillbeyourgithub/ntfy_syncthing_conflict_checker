@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -euo pipefail
+
 # Initialize default values
 verbose=false
 urltopic="print"

@@ -7,7 +7,7 @@ A simple Zsh script to detect and report file conflicts in Syncthing shared fold
 - Scans all Syncthing shared folders for sync conflicts
 - Supports both local output and remote notifications via ntfy
 - Verbose mode for detailed output
-- Customizable notification topics
+- Customizable notification urltopics (e.g. `ntfy.myserver.com/mytopic`)
 - Checks for required dependencies
 
 ## Requirements
@@ -40,7 +40,7 @@ Basic usage:
 Options:
 ```
 -v, --verbose     Show verbose output
--t, --topic       Specify notification topic (default: print)
+-t, --urltopic       Specify notification urltopic (default: print)
 -D, --no-date     Don't include dates in the output
 -a, --absolute    Use absolute paths instead of relative
 -h, --help        Show this help message
@@ -53,9 +53,9 @@ Examples:
 ./ntfy_syncthing_conflict_checker.sh --verbose
 ```
 
-2. Send notifications to a specific ntfy topic:
+2. Send notifications to a specific ntfy urltopic:
 ```bash
-./ntfy_syncthing_conflict_checker.sh --topic mytopic
+./ntfy_syncthing_conflict_checker.sh --urltopic myurltopic
 ```
 
 3. Check for conflicts without showing dates:
@@ -66,6 +66,10 @@ Examples:
 4. Check for conflicts using absolute paths:
 ```bash
 ./ntfy_syncthing_conflict_checker.sh --absolute
+```
+5. Send notifications to a specific ntfy urltopic on a specific ntfy server:
+```bash
+./ntfy_syncthing_conflict_checker.sh --urltopic my.ntfy.server.com/myurltopic
 ```
 
 ## Output
@@ -78,7 +82,7 @@ The script will output:
 
 ## Notification Support
 
-When using the `--topic` option, the script will send notifications via ntfy. Make sure ntfy is installed and configured.
+When using the `--urltopic` option, the script will send notifications via ntfy. Make sure ntfy is installed and configured.
 
 ## Contributing
 

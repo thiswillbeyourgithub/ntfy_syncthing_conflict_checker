@@ -2,7 +2,7 @@
 
 # Initialize default values
 verbose=false
-topic="print"
+urltopic="print"
 nodate=false
 abspath=false
 
@@ -12,7 +12,7 @@ show_usage() {
 Usage: $0 [options]
 Options:
     -v, --verbose    Show verbose output
-    -t, --topic      Specify notification topic (default: print)
+    -t, --urltopic      Specify notification urltopic (default: print)
     -D, --no-date    Dont include dates in the output
     -a, --absolute   Use absolute paths instead of relative
     -h, --help       Show this help message
@@ -27,17 +27,17 @@ while [[ $# -gt 0 ]]; do
             verbose=true
             shift
             ;;
-        -t|--topic)
+        -t|--urltopic)
             if [[ -z "$2" ]]; then
-                echo "Error: topic argument is required" >&2
+                echo "Error: urltopic argument is required" >&2
                 show_usage
             fi
-            # Check if ntfy is installed
-            if ! command -v ntfy &> /dev/null; then
-                echo "ntfy could not be found, please install it first"
+            # Check if apprise is installed
+            if ! command -v apprise &> /dev/null; then
+                echo "apprise could not be found, please install it first"
                 exit 1
             fi
-            topic="$2"
+            urltopic="$2"
             shift 2
             ;;
         -D|--no-date)
@@ -59,13 +59,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 function notify() {
-    if [[ "$topic" == "print" ]]
+    if [[ "$urltopic" == "print" ]]
     then
         echo "$1"
     else
-        # clean newlines for ntfy
+        # clean newlines for apprise
         cleaned=$(echo "$1" | sed 's/\n/\r\r/g')
-        NTFY_TITLE="Syncthing Conflicts" ntfy pub --quiet "$topic" "$cleaned"
+        apprise --title "Syncthing Conflicts" --body "$cleaned" "ntfys://$urltopic"
     fi
 }
 

@@ -114,11 +114,14 @@ echo "$sync_paths" | while IFS= read -r sync_path; do
     
     # Find conflicts and append to variable with relative paths and if needed creation dates
     # Exclude conflicts in .stversions directories as they are just versioning files
+    # Prune any directory we cannot read or search into, silence residual permission
+    # errors (e.g. EPERM "Operation not permitted") and tolerate a non-zero exit so an
+    # inaccessible subfolder is skipped instead of aborting the whole script.
     if [[ "$nodate" == "false" ]]
     then
-        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -not -path "*/.stversions/*" -exec sh -c 'printf "%s (%s)\n" "'$pathcmd'" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; | sort)
+        new_conflicts=$(find "$sync_path" \( -type d \( ! -readable -o ! -executable \) -prune \) -o \( -type f -name "*\.sync-conflict-*-*-*" -not -path "*/.stversions/*" -exec sh -c 'printf "%s (%s)\n" "'$pathcmd'" "$(stat -c "%y" "$1" | cut -d"." -f1)"' _ {} \; \) 2>/dev/null | sort || true)
     else
-        new_conflicts=$(find "$sync_path" -type f -name "*\.sync-conflict-*-*-*" -not -path "*/.stversions/*" -exec sh -c 'printf "%s\n" "'$pathcmd'"' _ {} \; | sort)
+        new_conflicts=$(find "$sync_path" \( -type d \( ! -readable -o ! -executable \) -prune \) -o \( -type f -name "*\.sync-conflict-*-*-*" -not -path "*/.stversions/*" -exec sh -c 'printf "%s\n" "'$pathcmd'"' _ {} \; \) 2>/dev/null | sort || true)
     fi
 
     if [ -n "$new_conflicts" ]; then
